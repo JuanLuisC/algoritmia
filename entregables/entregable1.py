@@ -1,8 +1,11 @@
-import sys, time
+import sys
+# import time
 from typing import Tuple
 
 from algoritmia.datastructures.digraphs import UndirectedGraph
 from algoritmia.datastructures.queues import Fifo
+
+# from utils.labyrinthviewer import LabyrinthViewer
 
 rows, cols = 0, 0
 
@@ -34,11 +37,9 @@ def load_labyrinth(file: str) -> UndirectedGraph:
     return UndirectedGraph(E=corridors)
 
 
-def distance_matrix(g: "UndirectedGraph", origin: Tuple[int, int], target: Tuple[int, int]):
+def distance_matrix(g: "UndirectedGraph"):
     """
     @param g: Grafo que contiene un laberinto.
-    @param origin: Vertice origen del laberinto.
-    @param target: Vertice target del laberinto.
     @return: Devuelve 2 matrices de enteros. La primera contiene la distancia desde todos los vertices hasta el vertice
     origen (0,0) y la segunda la distancia desde todos los vertices hasta el vertice target (rows-1, cols-1).
     """
@@ -64,8 +65,8 @@ def distance_matrix(g: "UndirectedGraph", origin: Tuple[int, int], target: Tuple
         m1.append([[-1]] * cols)
         n.append([[-1]] * cols)
 
-    m1 = edges_withd_path(g, origin, m1)
-    n = edges_withd_path(g, target, n)
+    m1 = edges_withd_path(g, (0, 0), m1)
+    n = edges_withd_path(g, (rows - 1, cols - 1), n)
 
     return m1, n
 
@@ -102,7 +103,7 @@ if __name__ == "__main__":
     # print('Carga completa en: ', time.time() - tiempoInicio)
     # tiempoPared = time.time()
 
-    inicio, final = distance_matrix(graphLab, (0, 0), (rows - 1, cols - 1))
+    inicio, final = distance_matrix(graphLab)
     lista = wall_to_break(inicio, final)
 
     # print('Tiempo que ha tardado en encontrar la pared: ', time.time() - tiempoPared)
